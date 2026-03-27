@@ -1,6 +1,6 @@
 {
   "name": "soc-radar",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "label": "SOCRadar",
   "description": "Threat Intelligence enriched with External Attack Surface Management and Digital Risk Protection Services",
   "publisher": "Community",
@@ -18,8 +18,8 @@
         "editable": true,
         "visible": true,
         "type": "text",
-        "description": "Specify the URL of the SOCRadar server to which you will connect and perform the automated operations.",
         "name": "url",
+        "description": "Specify the URL of the SOCRadar server to which you will connect and perform the automated operations.",
         "tooltip": "Type SOCRadar feed URL",
         "value": "https://platform.socradar.com/api"
       },
@@ -29,8 +29,8 @@
         "editable": true,
         "visible": true,
         "type": "integer",
-        "description": "Specify the Company ID used to access the SOCRadar server to which you will connect and perform the automated operations.",
         "name": "company_id",
+        "description": "Specify the Company ID used to access the SOCRadar server.",
         "tooltip": "Company ID"
       },
       {
@@ -39,8 +39,8 @@
         "editable": true,
         "visible": true,
         "type": "password",
-        "description": "Specify the Company API Key used to access the SOCRadar server to which you will connect and perform the automated operations.",
         "name": "company_key",
+        "description": "Specify the Company API Key used to access the SOCRadar server.",
         "tooltip": "Create a key at company settings"
       },
       {
@@ -49,9 +49,19 @@
         "editable": true,
         "visible": true,
         "type": "password",
-        "description": "Specify the Threat Analysis API Key used to access the SOCRadar server to which you will connect and perform the automated operations.",
         "name": "threat_analysis_api_key",
-        "tooltip": "Please obtain your SOCRadar malware analysis API key by contacting with our Operation Team, operation@socradar.io"
+        "description": "Specify the Threat Analysis API Key. Required for Threat Analysis and Malware Analysis operations.",
+        "tooltip": "Please obtain your SOCRadar malware analysis API key by contacting operation@socradar.io"
+      },
+      {
+        "title": "Multi-Tenant ID",
+        "required": false,
+        "editable": true,
+        "visible": true,
+        "type": "integer",
+        "name": "multi_tenant_id",
+        "description": "Specify the Multi-Tenant ID for provisioning multi-tenant management operations.",
+        "tooltip": "Required only for multi-tenant management operations"
       },
       {
         "title": "Verify SSL",
@@ -60,8 +70,8 @@
         "visible": true,
         "type": "checkbox",
         "value": "true",
-        "description": " Specifies whether the SSL certificate for the server is to be verified. By default, this option is set to True.",
-        "name": "verify"
+        "name": "verify",
+        "description": "Specifies whether the SSL certificate for the server is to be verified. By default, this option is set to True."
       }
     ]
   },
@@ -69,342 +79,1930 @@
     {
       "operation": "get_incidents",
       "title": "Get Incidents",
-      "description": "Retrieves a detailed list of incidents based on the start date, end date and pagination parameters that you have specified.",
+      "description": "Retrieves a list of incidents based on the start date, end date, and pagination parameters.",
       "category": "investigation",
       "annotation": "get_incidents",
-      "parameters": [
-        {
-          "title": "Start Date",
-          "required": false,
-          "editable": true,
-          "visible": true,
-          "type": "datetime",
-          "name": "start_date",
-          "description": "Specify the start date of the time range within which to search for and retrieve incidents.\nValid formats are Datetime format (1923-09-23) or Unix Timestamp format (1632355200)",
-          "tooltip": "Start date to start fetching incidents."
-        },
-        {
-          "title": "End Date",
-          "required": false,
-          "editable": true,
-          "visible": true,
-          "type": "datetime",
-          "name": "end_date",
-          "description": "Specify the end date of the time range within which to search for and retrieve incidents.\nValid formats are Datetime format (1923-09-23) or Unix Timestamp format (1632355200).",
-          "tooltip": "End date to start fetching incidents."
-        },
-        {
-          "title": "Status",
-          "name": "status",
-          "required": "false",
-          "editable": "true",
-          "visible": "true",
-          "type": "select",
-          "options": [
-            "ON_HOLD",
-            "OPEN",
-            "CLOSED",
-            "INVESTIGATING",
-            "FALSE_POSITIVE",
-            "RESOLVED"
-          ],
-          "description": "Specify the Status of the incident to filter the results from SOCRadar.",
-          "tooltip": "Specify the Status of the incidents."
-        },
-        {
-          "title": "Limit",
-          "required": false,
-          "editable": true,
-          "visible": true,
-          "type": "integer",
-          "name": "limit",
-          "value": 50,
-          "description": "Specify the maximum number of records to retrieve, per page. Default value is 50. Maximum value is 100",
-          "tooltip": "Specify maximum number of records to retrieve. Default value is 50. Maximum value is 100"
-        },
-        {
-          "title": "Page",
-          "required": false,
-          "editable": true,
-          "visible": true,
-          "type": "integer",
-          "name": "page",
-          "value": 1,
-          "description": "Specify the page number of records to retrieve from SOCRadar.",
-          "tooltip": "Specify the page number of records to retrieve."
-        }
-      ],
       "enabled": true,
-      "output_schema": [
-        {
-          "alarm_asset": "",
-          "alarm_assignees": "",
-          "alarm_id": "",
-          "alarm_related_assets": [],
-          "alarm_related_entities": "",
-          "alarm_response": "",
-          "alarm_risk_level": "",
-          "alarm_text": "",
-          "alarm_type_details": {
-            "alarm_compliance_list": [],
-            "alarm_default_mitigation_plan": "",
-            "alarm_default_risk_level": "",
-            "alarm_detection_and_analysis": "",
-            "alarm_generic_title": "",
-            "alarm_main_type": "",
-            "alarm_post_incident_analysis": "",
-            "alarm_sub_type": ""
-          },
-          "approved_by": "",
-          "content": {
-            "date": "",
-            "email": "",
-            "password": "",
-            "source": "",
-            "type": ""
-          },
-          "date": "",
-          "extra": "",
-          "history": [],
-          "is_approved": "",
-          "last_notification_date": "",
-          "notes": "",
-          "notification_id": "",
-          "status": "",
-          "tags": []
-        }
-      ]
+      "parameters": [
+        {"title": "Start Date", "name": "start_date", "type": "datetime", "required": false, "editable": true, "visible": true, "description": "Start date of the time range (Datetime or Unix Timestamp)."},
+        {"title": "End Date", "name": "end_date", "type": "datetime", "required": false, "editable": true, "visible": true, "description": "End date of the time range (Datetime or Unix Timestamp)."},
+        {"title": "Status", "name": "status", "type": "select", "required": false, "editable": true, "visible": true, "options": ["ON_HOLD","OPEN","CLOSED","INVESTIGATING","FALSE_POSITIVE","RESOLVED"], "description": "Filter incidents by status."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum number of records per page (max 100)."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number of records to retrieve."}
+      ],
+      "output_schema": {}
     },
     {
       "operation": "get_incident",
       "title": "Get Incident",
-      "description": "Retrieves a details of incidents based on the Alarm ID that you have specified.",
+      "description": "Retrieves details of a single incident based on the Alarm ID.",
       "category": "investigation",
       "annotation": "get_incident",
-      "parameters": [
-        {
-          "title": "Alarm ID",
-          "required": true,
-          "editable": true,
-          "visible": true,
-          "type": "integer",
-          "name": "alarm_id",
-          "description": "Specify the alarm ID to fetch its details from SOCRadar.",
-          "tooltip": "Specify the alarm ID to fetch its details from SOCRadar."
-        }
-      ],
       "enabled": true,
-      "output_schema": [
-        {
-          "alarm_asset": "",
-          "alarm_assignees": "",
-          "alarm_id": "",
-          "alarm_related_assets": [],
-          "alarm_related_entities": "",
-          "alarm_response": "",
-          "alarm_risk_level": "",
-          "alarm_text": "",
-          "alarm_type_details": {
-            "alarm_compliance_list": [],
-            "alarm_default_mitigation_plan": "",
-            "alarm_default_risk_level": "",
-            "alarm_detection_and_analysis": "",
-            "alarm_generic_title": "",
-            "alarm_main_type": "",
-            "alarm_post_incident_analysis": "",
-            "alarm_sub_type": ""
-          },
-          "approved_by": "",
-          "content": {
-            "date": "",
-            "email": "",
-            "password": "",
-            "source": "",
-            "type": ""
-          },
-          "date": "",
-          "extra": "",
-          "history": [],
-          "is_approved": "",
-          "last_notification_date": "",
-          "notes": "",
-          "notification_id": "",
-          "status": "",
-          "tags": []
-        }
-      ]
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "Alarm ID to fetch details for."}
+      ],
+      "output_schema": {}
     },
     {
       "operation": "threat_analysis",
       "title": "Threat Analysis",
-      "description": "Retrieves a details of threat analysis based on the inputs that you have specified. You can obtain the 'trust' score (out of 100) of an entity that is calculated based on various threat feed evaluations conducted by SOCRadar.",
+      "description": "Retrieves the trust score (out of 100) for an entity (IPv4, IPv6, Domain, or Hash).",
       "category": "investigation",
       "annotation": "threat_analysis",
-      "parameters": [
-        {
-          "title": "Entity",
-          "required": true,
-          "editable": true,
-          "visible": true,
-          "type": "text",
-          "name": "entity",
-          "description": "Specify the Intended entity to be analyzed in SOCRadar. Valid entity types: [IPv4, IPv6, Domain, Hash]",
-          "tooltip": "Specify the Intended entity to be analyzed in SOCRadar. Valid entity types: [IPv4, IPv6, Domain, Hash]"
-        },
-        {
-          "title": "Advance Investigation",
-          "required": false,
-          "editable": true,
-          "visible": true,
-          "type": "checkbox",
-          "name": "advance_investigation",
-          "description": "Specify the this parameter to have an advanced malware analysis over the entity.",
-          "tooltip": "Specify the this parameter to have an advanced malware analysis over the entity.",
-          "value": false
-        },
-        {
-          "title": "Force New Analysis",
-          "required": false,
-          "editable": true,
-          "visible": true,
-          "type": "checkbox",
-          "name": "force_new_analysis",
-          "description": "Specify the Malware analysis results of an entity are being cached for 24 hours after result of the entity being obtained by SOCRadar.",
-          "tooltip": "Specify the Malware analysis results of an entity are being cached for 24 hours.",
-          "value": false
-        }
-      ],
       "enabled": true,
-      "output_schema": {
-        "classification": "",
-        "credit_details": {
-          "max_daily_credit": "",
-          "max_monthly_credit": "",
-          "remaining_credit": "",
-          "remaining_daily_credit": "",
-          "remaining_monthly_credit": "",
-          "total_api_credit": ""
-        },
-        "dns_info": {
-          "PTR": []
-        },
-        "findings": [],
-        "geo_location": [
-          {
-            "AsnCode": "",
-            "AsnName": "",
-            "Cidr": "",
-            "CityName": "",
-            "CountryCode": "",
-            "CountryName": "",
-            "Ip": "",
-            "Latitude": "",
-            "Longitude": "",
-            "RegionName": "",
-            "Timezone": "",
-            "ZipCode": ""
-          }
-        ],
-        "is_advance_investigation": "",
-        "is_blacklisted": "",
-        "is_whitelisted": "",
-        "remaining_credit": "",
-        "score": 0.0,
-        "score_details": {},
-        "value": "",
-        "whitelist_hits": "",
-        "whitelist_sources": [],
-        "whois": {
-          "asn": "",
-          "asn_cidr": "",
-          "asn_country_code": "",
-          "asn_date": "",
-          "asn_description": "",
-          "asn_registry": "",
-          "nets": [
-            {
-              "address": "",
-              "cidr": "",
-              "city": "",
-              "country": "",
-              "created": "",
-              "description": "",
-              "emails": [],
-              "handle": "",
-              "name": "",
-              "postal_code": "",
-              "range": "",
-              "state": "",
-              "updated": ""
-            }
-          ],
-          "nir": "",
-          "query": "",
-          "raw": "",
-          "raw_referral": "",
-          "referral": ""
-        }
-      }
+      "parameters": [
+        {"title": "Entity", "name": "entity", "type": "text", "required": true, "editable": true, "visible": true, "description": "Entity to analyze. Valid types: IPv4, IPv6, Domain, Hash."},
+        {"title": "Advance Investigation", "name": "advance_investigation", "type": "checkbox", "required": false, "editable": true, "visible": true, "value": false, "description": "Enable advanced malware analysis."},
+        {"title": "Force New Analysis", "name": "force_new_analysis", "type": "checkbox", "required": false, "editable": true, "visible": true, "value": false, "description": "Bypass 24-hour cache and force a new analysis."}
+      ],
+      "output_schema": {}
     },
     {
       "operation": "change_status",
       "title": "Change Status",
-      "description": "Updates status of an incident based on the incident ID and status that you have specified.",
+      "description": "Updates the status of an incident based on the Alarm ID.",
       "category": "investigation",
       "annotation": "change_status",
-      "parameters": [
-        {
-          "title": "Alarm ID",
-          "required": true,
-          "editable": true,
-          "visible": true,
-          "type": "integer",
-          "name": "alarm_id",
-          "description": "Specify the ID of the Alarm to update it on SOCRadar.",
-          "tooltip": "Specify the ID of the Alarm to update it on SOCRadar."
-        },
-        {
-          "title": "Status",
-          "name": "status",
-          "required": "true",
-          "editable": "true",
-          "visible": "true",
-          "type": "select",
-          "options": [
-            "OPEN",
-            "INVESTIGATING",
-            "PENDING_INFO",
-            "LEGAL_REVIEW",
-            "VENDOR_ASSESSMENT",
-            "FALSE_POSITIVE",
-            "DUPLICATE",
-            "PROCESSED_INTERNALLY",
-            "NOT_APPLICABLE",
-            "MITIGATED",
-            "RESOLVED"
-          ],
-          "description": "Specify the Status of the Alarm to update it on SOCRadar.",
-          "tooltip": "Specify the Status of the Alarm to update it on SOCRadar."
-        },
-        {
-          "title": "Comments",
-          "required": true,
-          "editable": true,
-          "visible": true,
-          "type": "text",
-          "name": "comments",
-          "description": "Specify the comments about the incident to update it on SOCRadar. This will be shown under the Resolve Notes section in the incident details.",
-          "tooltip": "Specify the comments about the incident to update it on SOCRada."
-        }
-      ],
       "enabled": true,
-      "output_schema": {
-        "data": "",
-        "is_success": "",
-        "message": "",
-        "response_code": ""
-      }
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "ID of the alarm to update."},
+        {"title": "Status", "name": "status", "type": "select", "required": true, "editable": true, "visible": true, "options": ["OPEN","INVESTIGATING","PENDING_INFO","LEGAL_REVIEW","VENDOR_ASSESSMENT","FALSE_POSITIVE","DUPLICATE","PROCESSED_INTERNALLY","NOT_APPLICABLE","MITIGATED","RESOLVED"], "description": "New status for the alarm."},
+        {"title": "Comment", "name": "comment", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comment about the status change."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "post_alarm_comment",
+      "title": "Post Alarm Comment",
+      "description": "Adds a comment to an alarm.",
+      "category": "investigation",
+      "annotation": "post_alarm_comment",
+      "enabled": true,
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "ID of the alarm."},
+        {"title": "Comment", "name": "comment", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comment to add to the alarm."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "ask_to_analyst_v2",
+      "title": "Ask To Analyst",
+      "description": "Sends a message to a SOCRadar analyst for a specific alarm.",
+      "category": "investigation",
+      "annotation": "ask_to_analyst_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "ID of the alarm."},
+        {"title": "Message", "name": "message", "type": "text", "required": true, "editable": true, "visible": true, "description": "Message to send to the analyst."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_assignee",
+      "title": "Get Alarm Assignee",
+      "description": "Retrieves the current assignee of an alarm.",
+      "category": "investigation",
+      "annotation": "get_assignee",
+      "enabled": true,
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "ID of the alarm."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "change_assignee",
+      "title": "Change Alarm Assignee",
+      "description": "Changes the assignee of an alarm.",
+      "category": "investigation",
+      "annotation": "change_assignee",
+      "enabled": true,
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "ID of the alarm."},
+        {"title": "Assignee ID", "name": "assignee_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user to assign."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "change_severity",
+      "title": "Change Alarm Severity",
+      "description": "Changes the severity level of an alarm.",
+      "category": "investigation",
+      "annotation": "change_severity",
+      "enabled": true,
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "ID of the alarm."},
+        {"title": "Severity", "name": "severity", "type": "select", "required": true, "editable": true, "visible": true, "options": ["LOW","MEDIUM","HIGH","CRITICAL"], "description": "New severity level."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_assignee_options",
+      "title": "Get Assignee Options",
+      "description": "Retrieves the list of users available for alarm assignment.",
+      "category": "investigation",
+      "annotation": "get_assignee_options",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_remove_tag",
+      "title": "Add or Remove Tag",
+      "description": "Adds or removes a tag from an alarm.",
+      "category": "investigation",
+      "annotation": "add_remove_tag",
+      "enabled": true,
+      "parameters": [
+        {"title": "Alarm ID", "name": "alarm_id", "type": "integer", "required": true, "editable": true, "visible": true, "description": "ID of the alarm."},
+        {"title": "Tag", "name": "tag", "type": "text", "required": true, "editable": true, "visible": true, "description": "Tag value to add or remove."},
+        {"title": "Action", "name": "action", "type": "select", "required": true, "editable": true, "visible": true, "options": ["add","remove"], "description": "Whether to add or remove the tag."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_threat_analysis_result",
+      "title": "Get Threat Analysis Result",
+      "description": "Retrieves the result of a previously submitted threat analysis for an entity.",
+      "category": "investigation",
+      "annotation": "get_threat_analysis_result",
+      "enabled": true,
+      "parameters": [
+        {"title": "Entity", "name": "entity", "type": "text", "required": true, "editable": true, "visible": true, "description": "Entity to retrieve result for (IPv4, IPv6, Domain, Hash)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_triggered_analysis_list",
+      "title": "Get Triggered Analysis List",
+      "description": "Retrieves the list of triggered threat analysis requests.",
+      "category": "investigation",
+      "annotation": "get_triggered_analysis_list",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_indicator_details",
+      "title": "Get Indicator Details",
+      "description": "Retrieves enrichment details for a given IoC indicator.",
+      "category": "investigation",
+      "annotation": "get_indicator_details",
+      "enabled": true,
+      "parameters": [
+        {"title": "Indicator", "name": "indicator", "type": "text", "required": true, "editable": true, "visible": true, "description": "The IoC indicator (IP, domain, hash, URL)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_indicator_details_stix",
+      "title": "Get Indicator Details (STIX)",
+      "description": "Retrieves enrichment details for a given IoC indicator in STIX format.",
+      "category": "investigation",
+      "annotation": "get_indicator_details_stix",
+      "enabled": true,
+      "parameters": [
+        {"title": "Indicator", "name": "indicator", "type": "text", "required": true, "editable": true, "visible": true, "description": "The IoC indicator (IP, domain, hash, URL)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "search_threat_hunting_rules",
+      "title": "Search Threat Hunting Rules",
+      "description": "Searches CTI threat hunting rules by query.",
+      "category": "investigation",
+      "annotation": "search_threat_hunting_rules",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": false, "editable": true, "visible": true, "description": "Search query string."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "download_threat_hunting_rules",
+      "title": "Download Threat Hunting Rules",
+      "description": "Downloads a specific threat hunting rule by Rule ID.",
+      "category": "investigation",
+      "annotation": "download_threat_hunting_rules",
+      "enabled": true,
+      "parameters": [
+        {"title": "Rule ID", "name": "rule_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the rule to download."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "query_threat_data",
+      "title": "Query Threat Data",
+      "description": "Queries CTI threat intelligence data using the ThreatHunting API.",
+      "category": "investigation",
+      "annotation": "query_threat_data",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": true, "editable": true, "visible": true, "description": "Threat hunting query string."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_threat_content_details",
+      "title": "Get Threat Content Details",
+      "description": "Retrieves detailed content for a specific threat intelligence item.",
+      "category": "investigation",
+      "annotation": "get_threat_content_details",
+      "enabled": true,
+      "parameters": [
+        {"title": "Content ID", "name": "content_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the threat content item."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "threat_investigating",
+      "title": "Threat Investigating (Extended)",
+      "description": "Performs extended threat investigation using provided indicators.",
+      "category": "investigation",
+      "annotation": "threat_investigating",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": true, "editable": true, "visible": true, "description": "Investigation query string."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "search_vulnerabilities",
+      "title": "Search Vulnerabilities",
+      "description": "Searches CVE vulnerability data by query string.",
+      "category": "investigation",
+      "annotation": "search_vulnerabilities",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": false, "editable": true, "visible": true, "description": "Search query (e.g. CVE ID, keyword)."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "search_vulnerabilities_v2",
+      "title": "Search Vulnerabilities V2",
+      "description": "Searches CVE vulnerability data by query string (V2 endpoint with enhanced results).",
+      "category": "investigation",
+      "annotation": "search_vulnerabilities_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": false, "editable": true, "visible": true, "description": "Search query (e.g. CVE ID, keyword)."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_cve_trends",
+      "title": "Get CVE Trends",
+      "description": "Retrieves trending CVE vulnerability data.",
+      "category": "investigation",
+      "annotation": "get_cve_trends",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_cve_details",
+      "title": "Get CVE Details",
+      "description": "Retrieves detailed information about a specific CVE.",
+      "category": "investigation",
+      "annotation": "get_cve_details",
+      "enabled": true,
+      "parameters": [
+        {"title": "CVE ID", "name": "cve_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "CVE identifier (e.g. CVE-2024-1234)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_cve_tweets",
+      "title": "Get CVE Tweets",
+      "description": "Retrieves social media posts related to a specific CVE.",
+      "category": "investigation",
+      "annotation": "get_cve_tweets",
+      "enabled": true,
+      "parameters": [
+        {"title": "CVE", "name": "cve", "type": "text", "required": true, "editable": true, "visible": true, "description": "CVE identifier (e.g. CVE-2024-1234)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_cve_dorks",
+      "title": "Get CVE Dorks",
+      "description": "Retrieves search dorks associated with a specific CVE.",
+      "category": "investigation",
+      "annotation": "get_cve_dorks",
+      "enabled": true,
+      "parameters": [
+        {"title": "CVE", "name": "cve", "type": "text", "required": true, "editable": true, "visible": true, "description": "CVE identifier."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_cve_news",
+      "title": "Get CVE News",
+      "description": "Retrieves news articles related to a specific CVE.",
+      "category": "investigation",
+      "annotation": "get_cve_news",
+      "enabled": true,
+      "parameters": [
+        {"title": "CVE", "name": "cve", "type": "text", "required": true, "editable": true, "visible": true, "description": "CVE identifier."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_cve_iocs",
+      "title": "Get CVE IoCs",
+      "description": "Retrieves indicators of compromise associated with a specific CVE.",
+      "category": "investigation",
+      "annotation": "get_cve_iocs",
+      "enabled": true,
+      "parameters": [
+        {"title": "CVE", "name": "cve", "type": "text", "required": true, "editable": true, "visible": true, "description": "CVE identifier."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_rapid_reputation",
+      "title": "Get Rapid Reputation",
+      "description": "Retrieves rapid reputation score for an entity.",
+      "category": "investigation",
+      "annotation": "get_rapid_reputation",
+      "enabled": true,
+      "parameters": [
+        {"title": "Entity", "name": "entity", "type": "text", "required": true, "editable": true, "visible": true, "description": "Entity to check reputation for (IP, domain, hash)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_threat_actors",
+      "title": "Get Threat Actors",
+      "description": "Retrieves a list of threat actor groups.",
+      "category": "investigation",
+      "annotation": "get_threat_actors",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_actor_detail",
+      "title": "Get Actor Detail",
+      "description": "Retrieves details for a specific threat actor.",
+      "category": "investigation",
+      "annotation": "get_actor_detail",
+      "enabled": true,
+      "parameters": [
+        {"title": "Actor ID", "name": "actor_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the threat actor."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_actor_detailed_content",
+      "title": "Get Actor Detailed Content",
+      "description": "Retrieves detailed content for a specific threat actor.",
+      "category": "investigation",
+      "annotation": "get_actor_detailed_content",
+      "enabled": true,
+      "parameters": [
+        {"title": "Actor ID", "name": "actor_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the threat actor."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_actor_param_options",
+      "title": "Get Actor Parameter Options",
+      "description": "Retrieves available parameter options for threat actor queries.",
+      "category": "investigation",
+      "annotation": "get_actor_param_options",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_latest_vulnerabilities_v2",
+      "title": "Get Latest Vulnerabilities V2",
+      "description": "Retrieves the latest vulnerability findings for assets in the attack surface (V2).",
+      "category": "investigation",
+      "annotation": "get_latest_vulnerabilities_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_latest_mobile_app_security",
+      "title": "Get Latest Mobile App Security Vulnerabilities",
+      "description": "Retrieves the latest mobile application security vulnerability findings.",
+      "category": "investigation",
+      "annotation": "get_latest_mobile_app_security",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_all_assets",
+      "title": "Get All Assets",
+      "description": "Retrieves all assets in the digital footprint.",
+      "category": "investigation",
+      "annotation": "get_all_assets",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_all_assets_v2",
+      "title": "Get All Assets V2",
+      "description": "Retrieves all assets in the digital footprint (V2 endpoint).",
+      "category": "investigation",
+      "annotation": "get_all_assets_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_asset_details",
+      "title": "Get Asset Details",
+      "description": "Retrieves details for assets of a specific type.",
+      "category": "investigation",
+      "annotation": "get_asset_details",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset Type", "name": "asset_type", "type": "text", "required": true, "editable": true, "visible": true, "description": "Asset type (e.g. domain, ip, subdomain)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_assets",
+      "title": "Add Assets",
+      "description": "Adds assets of a specific type to the digital footprint.",
+      "category": "investigation",
+      "annotation": "add_assets",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset Type", "name": "asset_type", "type": "text", "required": true, "editable": true, "visible": true, "description": "Asset type (e.g. domain, ip, subdomain)."},
+        {"title": "Assets", "name": "assets", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated list of assets to add."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "exclude_asset",
+      "title": "Exclude Asset",
+      "description": "Marks an asset as a false positive to exclude it from monitoring.",
+      "category": "investigation",
+      "annotation": "exclude_asset",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset ID", "name": "asset_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the asset to exclude."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "configure_monitoring",
+      "title": "Configure Asset Monitoring",
+      "description": "Enables or disables monitoring for a specific asset.",
+      "category": "investigation",
+      "annotation": "configure_monitoring",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset ID", "name": "asset_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the asset."},
+        {"title": "Monitoring", "name": "monitoring", "type": "checkbox", "required": true, "editable": true, "visible": true, "value": true, "description": "Enable or disable monitoring."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "download_website_uptime_checks",
+      "title": "Download Website Uptime Checks",
+      "description": "Downloads website uptime check records.",
+      "category": "investigation",
+      "annotation": "download_website_uptime_checks",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "change_uptime_check_location",
+      "title": "Change Uptime Check Location",
+      "description": "Changes the monitoring location for website uptime checks.",
+      "category": "investigation",
+      "annotation": "change_uptime_check_location",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset ID", "name": "asset_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the website asset."},
+        {"title": "Location", "name": "location", "type": "text", "required": true, "editable": true, "visible": true, "description": "New monitoring location."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_impersonating_accounts",
+      "title": "Get Impersonating Accounts",
+      "description": "Retrieves impersonating social media accounts detected for the company.",
+      "category": "investigation",
+      "annotation": "get_impersonating_accounts",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records to return."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_impersonating_domains",
+      "title": "Get Impersonating Domains",
+      "description": "Retrieves impersonating domains detected for the company.",
+      "category": "investigation",
+      "annotation": "get_impersonating_domains",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_rogue_mobile_applications",
+      "title": "Get Rogue Mobile Applications",
+      "description": "Retrieves rogue mobile applications impersonating the company.",
+      "category": "investigation",
+      "annotation": "get_rogue_mobile_applications",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_bad_reputation_data",
+      "title": "Get Bad Reputation Data",
+      "description": "Retrieves bad reputation findings for company-associated entities.",
+      "category": "investigation",
+      "annotation": "get_bad_reputation_data",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_social_media_findings",
+      "title": "Get Social Media Findings",
+      "description": "Retrieves social media findings related to brand protection.",
+      "category": "investigation",
+      "annotation": "get_social_media_findings",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_phishing_domains",
+      "title": "Add Phishing Domains",
+      "description": "Adds phishing domains to brand protection monitoring.",
+      "category": "investigation",
+      "annotation": "add_phishing_domains",
+      "enabled": true,
+      "parameters": [
+        {"title": "Domains", "name": "domains", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated list of phishing domains to add."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_impersonating_account",
+      "title": "Add Impersonating Account",
+      "description": "Adds an impersonating social media account to brand protection monitoring.",
+      "category": "investigation",
+      "annotation": "add_impersonating_account",
+      "enabled": true,
+      "parameters": [
+        {"title": "Account", "name": "account", "type": "text", "required": true, "editable": true, "visible": true, "description": "Impersonating account identifier (URL or handle)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_rogue_mobile_application",
+      "title": "Add Rogue Mobile Application",
+      "description": "Adds a rogue mobile application to brand protection monitoring.",
+      "category": "investigation",
+      "annotation": "add_rogue_mobile_application",
+      "enabled": true,
+      "parameters": [
+        {"title": "App", "name": "app", "type": "text", "required": true, "editable": true, "visible": true, "description": "App store URL or app identifier."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_social_media_finding",
+      "title": "Add Social Media Finding",
+      "description": "Adds a social media finding to brand protection monitoring.",
+      "category": "investigation",
+      "annotation": "add_social_media_finding",
+      "enabled": true,
+      "parameters": [
+        {"title": "Finding", "name": "finding", "type": "text", "required": true, "editable": true, "visible": true, "description": "Social media finding URL or description."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_impersonating_domains_status",
+      "title": "Update Impersonating Domains Status",
+      "description": "Updates the status of impersonating domain records.",
+      "category": "investigation",
+      "annotation": "update_impersonating_domains_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_bad_reputation_status",
+      "title": "Update Bad Reputation Status",
+      "description": "Updates the status of bad reputation records.",
+      "category": "investigation",
+      "annotation": "update_bad_reputation_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_rogue_mobile_app_status",
+      "title": "Update Rogue Mobile App Status",
+      "description": "Updates the status of rogue mobile application records.",
+      "category": "investigation",
+      "annotation": "update_rogue_mobile_app_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_impersonating_account_status",
+      "title": "Update Impersonating Account Status",
+      "description": "Updates the status of impersonating account records.",
+      "category": "investigation",
+      "annotation": "update_impersonating_account_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_social_media_findings_status",
+      "title": "Update Social Media Findings Status",
+      "description": "Updates the status of social media finding records.",
+      "category": "investigation",
+      "annotation": "update_social_media_findings_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_botnet_data_v2",
+      "title": "Get Botnet Data V2",
+      "description": "Retrieves botnet-related dark web monitoring data.",
+      "category": "investigation",
+      "annotation": "get_botnet_data_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_black_market_v2",
+      "title": "Get Black Market Data V2",
+      "description": "Retrieves black market dark web monitoring data.",
+      "category": "investigation",
+      "annotation": "get_black_market_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_suspicious_content_v2",
+      "title": "Get Suspicious Content V2",
+      "description": "Retrieves suspicious content dark web monitoring data.",
+      "category": "investigation",
+      "annotation": "get_suspicious_content_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_pii_exposure_v2",
+      "title": "Get PII Exposure V2",
+      "description": "Retrieves PII exposure dark web monitoring data.",
+      "category": "investigation",
+      "annotation": "get_pii_exposure_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_im_content_v2",
+      "title": "Get IM Content V2",
+      "description": "Retrieves instant messaging content dark web monitoring data.",
+      "category": "investigation",
+      "annotation": "get_im_content_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_botnet_data_status",
+      "title": "Update Botnet Data Status",
+      "description": "Updates the status of botnet data records.",
+      "category": "investigation",
+      "annotation": "update_botnet_data_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_black_market_status",
+      "title": "Update Black Market Status",
+      "description": "Updates the status of black market records.",
+      "category": "investigation",
+      "annotation": "update_black_market_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_suspicious_content_status",
+      "title": "Update Suspicious Content Status",
+      "description": "Updates the status of suspicious content records.",
+      "category": "investigation",
+      "annotation": "update_suspicious_content_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_pii_exposure_status",
+      "title": "Update PII Exposure Status",
+      "description": "Updates the status of PII exposure records.",
+      "category": "investigation",
+      "annotation": "update_pii_exposure_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_im_content_status",
+      "title": "Update IM Content Status",
+      "description": "Updates the status of IM content records.",
+      "category": "investigation",
+      "annotation": "update_im_content_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "post_request_obtain",
+      "title": "Request Obtain Dark Web Data",
+      "description": "Submits a request to obtain full dark web data for a specific record.",
+      "category": "investigation",
+      "annotation": "post_request_obtain",
+      "enabled": true,
+      "parameters": [
+        {"title": "Data ID", "name": "data_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the dark web data record."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "info_stealer_search",
+      "title": "Info Stealer Search",
+      "description": "Searches for stolen credentials and identity data using a query string.",
+      "category": "investigation",
+      "annotation": "info_stealer_search",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": true, "editable": true, "visible": true, "description": "Search query (e.g. email, domain, username)."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "info_stealer_download_credentials",
+      "title": "Download Stolen Credentials",
+      "description": "Downloads the credential file for a specific info stealer query.",
+      "category": "investigation",
+      "annotation": "info_stealer_download_credentials",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query ID", "name": "query_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the info stealer query."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "info_stealer_download_info_file",
+      "title": "Download Info Stealer Info File",
+      "description": "Downloads the info file for a specific info stealer query.",
+      "category": "investigation",
+      "annotation": "info_stealer_download_info_file",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query ID", "name": "query_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the info stealer query."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "breach_query",
+      "title": "Breach Query",
+      "description": "Searches breach data for a given query.",
+      "category": "investigation",
+      "annotation": "breach_query",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": true, "editable": true, "visible": true, "description": "Search query (e.g. email, domain)."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "breaches_download",
+      "title": "Download Breach Data",
+      "description": "Downloads the breach file for a specific breach ID.",
+      "category": "investigation",
+      "annotation": "breaches_download",
+      "enabled": true,
+      "parameters": [
+        {"title": "Breach ID", "name": "breach_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the breach record."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "info_stealer_file_tree",
+      "title": "Info Stealer File Tree",
+      "description": "Retrieves the file tree for a specific info stealer query result.",
+      "category": "investigation",
+      "annotation": "info_stealer_file_tree",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query ID", "name": "query_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the info stealer query."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "stealer_logs_on_sale_query",
+      "title": "Stealer Logs On Sale Query",
+      "description": "Searches for stealer logs currently on sale.",
+      "category": "investigation",
+      "annotation": "stealer_logs_on_sale_query",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": true, "editable": true, "visible": true, "description": "Search query string."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "stealer_logs_on_sale_download",
+      "title": "Download Stealer Log",
+      "description": "Downloads a specific stealer log on sale.",
+      "category": "investigation",
+      "annotation": "stealer_logs_on_sale_download",
+      "enabled": true,
+      "parameters": [
+        {"title": "Log ID", "name": "log_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the stealer log."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "stealer_logs_on_sale_decompose",
+      "title": "Decompose Stealer Log Content",
+      "description": "Decomposes the content of a specific stealer log.",
+      "category": "investigation",
+      "annotation": "stealer_logs_on_sale_decompose",
+      "enabled": true,
+      "parameters": [
+        {"title": "Log ID", "name": "log_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the stealer log."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "stealer_logs_on_sale_full_content",
+      "title": "Get Stealer Log Full Content",
+      "description": "Retrieves the full content of a specific stealer log.",
+      "category": "investigation",
+      "annotation": "stealer_logs_on_sale_full_content",
+      "enabled": true,
+      "parameters": [
+        {"title": "Log ID", "name": "log_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the stealer log."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_user_roles",
+      "title": "Get User Roles",
+      "description": "Retrieves available user roles in the company.",
+      "category": "investigation",
+      "annotation": "get_user_roles",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_users",
+      "title": "Get Users",
+      "description": "Retrieves all users in the company.",
+      "category": "investigation",
+      "annotation": "get_users",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "create_user",
+      "title": "Create User",
+      "description": "Creates a new user in the company.",
+      "category": "investigation",
+      "annotation": "create_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "Email", "name": "email", "type": "text", "required": true, "editable": true, "visible": true, "description": "Email address of the new user."},
+        {"title": "Name", "name": "name", "type": "text", "required": true, "editable": true, "visible": true, "description": "Full name of the new user."},
+        {"title": "Role IDs", "name": "role_ids", "type": "text", "required": false, "editable": true, "visible": true, "description": "Comma-separated role IDs to assign."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "enable_user",
+      "title": "Enable User",
+      "description": "Enables a user account.",
+      "category": "investigation",
+      "annotation": "enable_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user to enable."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "disable_user",
+      "title": "Disable User",
+      "description": "Disables a user account.",
+      "category": "investigation",
+      "annotation": "disable_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user to disable."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "delete_user",
+      "title": "Delete User",
+      "description": "Deletes a user account.",
+      "category": "investigation",
+      "annotation": "delete_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user to delete."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_roles_to_user",
+      "title": "Add Roles To User",
+      "description": "Adds roles to a user account.",
+      "category": "investigation",
+      "annotation": "add_roles_to_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user."},
+        {"title": "Role IDs", "name": "role_ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated role IDs to add."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "delete_roles_from_user",
+      "title": "Delete Roles From User",
+      "description": "Removes roles from a user account.",
+      "category": "investigation",
+      "annotation": "delete_roles_from_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user."},
+        {"title": "Role IDs", "name": "role_ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated role IDs to remove."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "enable_user_sso",
+      "title": "Enable User SSO",
+      "description": "Enables SSO for a user account.",
+      "category": "investigation",
+      "annotation": "enable_user_sso",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "disable_user_sso",
+      "title": "Disable User SSO",
+      "description": "Disables SSO for a user account.",
+      "category": "investigation",
+      "annotation": "disable_user_sso",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_allowlist_entities",
+      "title": "Get Allowlist Entities",
+      "description": "Retrieves all whitelisted entities for the company.",
+      "category": "investigation",
+      "annotation": "get_allowlist_entities",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_allowlist_entity",
+      "title": "Add Allowlist Entity",
+      "description": "Adds an entity to the company allowlist.",
+      "category": "investigation",
+      "annotation": "add_allowlist_entity",
+      "enabled": true,
+      "parameters": [
+        {"title": "Entity", "name": "entity", "type": "text", "required": true, "editable": true, "visible": true, "description": "Entity value to add (IP, domain, hash)."},
+        {"title": "Entity Type", "name": "entity_type", "type": "text", "required": true, "editable": true, "visible": true, "description": "Type of entity (ip, domain, hash)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "upload_allowlist_file",
+      "title": "Upload Allowlist File",
+      "description": "Uploads a bulk allowlist file.",
+      "category": "investigation",
+      "annotation": "upload_allowlist_file",
+      "enabled": true,
+      "parameters": [
+        {"title": "File Content", "name": "file_content", "type": "text", "required": true, "editable": true, "visible": true, "description": "Base64-encoded file content."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "delete_allowlist_entity",
+      "title": "Delete Allowlist Entity",
+      "description": "Removes an entity from the company allowlist.",
+      "category": "investigation",
+      "annotation": "delete_allowlist_entity",
+      "enabled": true,
+      "parameters": [
+        {"title": "Entity ID", "name": "entity_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the entity to remove."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_company_pocket_data",
+      "title": "Get Company Pocket Data",
+      "description": "Retrieves threat feed data from the company pocket.",
+      "category": "investigation",
+      "annotation": "get_company_pocket_data",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_company_pocket_indicators",
+      "title": "Add Company Pocket Indicators",
+      "description": "Adds threat indicators to the company pocket.",
+      "category": "investigation",
+      "annotation": "add_company_pocket_indicators",
+      "enabled": true,
+      "parameters": [
+        {"title": "Indicators", "name": "indicators", "type": "text", "required": true, "editable": true, "visible": true, "description": "JSON array of indicators to add."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "upload_company_pocket_file",
+      "title": "Upload Company Pocket File",
+      "description": "Uploads a threat feed file to the company pocket.",
+      "category": "investigation",
+      "annotation": "upload_company_pocket_file",
+      "enabled": true,
+      "parameters": [
+        {"title": "File Content", "name": "file_content", "type": "text", "required": true, "editable": true, "visible": true, "description": "Base64-encoded file content."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "delete_company_pocket_entities",
+      "title": "Delete Company Pocket Entities",
+      "description": "Deletes threat entities from the company pocket.",
+      "category": "investigation",
+      "annotation": "delete_company_pocket_entities",
+      "enabled": true,
+      "parameters": [
+        {"title": "Entity IDs", "name": "entity_ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated entity IDs to delete."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "submit_phishing_takedown",
+      "title": "Submit Phishing Takedown Request",
+      "description": "Submits a takedown request for a phishing domain or URL.",
+      "category": "investigation",
+      "annotation": "submit_phishing_takedown",
+      "enabled": true,
+      "parameters": [
+        {"title": "Domain or URL", "name": "domain_or_url", "type": "text", "required": true, "editable": true, "visible": true, "description": "Phishing domain or URL to take down."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "submit_rogue_mobile_app_takedown",
+      "title": "Submit Rogue Mobile App Takedown",
+      "description": "Submits a takedown request for a rogue mobile application.",
+      "category": "investigation",
+      "annotation": "submit_rogue_mobile_app_takedown",
+      "enabled": true,
+      "parameters": [
+        {"title": "App ID", "name": "app_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the rogue mobile app record."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "submit_social_media_takedown",
+      "title": "Submit Social Media Impersonation Takedown",
+      "description": "Submits a takedown request for a social media impersonation finding.",
+      "category": "investigation",
+      "annotation": "submit_social_media_takedown",
+      "enabled": true,
+      "parameters": [
+        {"title": "Finding ID", "name": "finding_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the social media finding record."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "submit_source_code_takedown",
+      "title": "Submit Source Code Leak Takedown",
+      "description": "Submits a takedown request for a source code leak.",
+      "category": "investigation",
+      "annotation": "submit_source_code_takedown",
+      "enabled": true,
+      "parameters": [
+        {"title": "Leak ID", "name": "leak_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the source code leak record."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_takedown_progress",
+      "title": "Get Takedown Progress",
+      "description": "Retrieves the progress status of submitted takedown requests.",
+      "category": "investigation",
+      "annotation": "get_takedown_progress",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_vip_protection",
+      "title": "Get VIP Protection Data",
+      "description": "Retrieves VIP protection monitoring data.",
+      "category": "investigation",
+      "annotation": "get_vip_protection",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_vip_protection_status",
+      "title": "Update VIP Protection Status",
+      "description": "Updates the status of VIP protection records.",
+      "category": "investigation",
+      "annotation": "update_vip_protection_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_surface_web_monitoring",
+      "title": "Get Surface Web Monitoring Records",
+      "description": "Retrieves surface web monitoring records.",
+      "category": "investigation",
+      "annotation": "get_surface_web_monitoring",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_surface_web_monitoring_record",
+      "title": "Add Surface Web Monitoring Record",
+      "description": "Adds a URL to surface web monitoring.",
+      "category": "investigation",
+      "annotation": "add_surface_web_monitoring_record",
+      "enabled": true,
+      "parameters": [
+        {"title": "URL", "name": "record_url", "type": "text", "required": true, "editable": true, "visible": true, "description": "URL to add to surface web monitoring."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_surface_web_monitoring_status",
+      "title": "Update Surface Web Monitoring Status",
+      "description": "Updates the status of surface web monitoring records.",
+      "category": "investigation",
+      "annotation": "update_surface_web_monitoring_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_fraud_protection_v2",
+      "title": "Get Fraud Protection Data V2",
+      "description": "Retrieves fraud protection data.",
+      "category": "investigation",
+      "annotation": "get_fraud_protection_v2",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_fraud_protection_status",
+      "title": "Update Fraud Protection Status",
+      "description": "Updates the status of fraud protection records.",
+      "category": "investigation",
+      "annotation": "update_fraud_protection_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "IDs", "name": "ids", "type": "text", "required": true, "editable": true, "visible": true, "description": "Comma-separated record IDs."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New status value."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_ransomware_victims",
+      "title": "Get Ransomware Victims",
+      "description": "Retrieves ransomware victim news and intelligence.",
+      "category": "investigation",
+      "annotation": "get_ransomware_victims",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "search_dark_web_news",
+      "title": "Search Dark Web News",
+      "description": "Searches CTI dark web news and intelligence feeds.",
+      "category": "investigation",
+      "annotation": "search_dark_web_news",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": false, "editable": true, "visible": true, "description": "Search query string."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_source_code_leakage",
+      "title": "Get Source Code Leakage",
+      "description": "Retrieves source code leakage findings.",
+      "category": "investigation",
+      "annotation": "get_source_code_leakage",
+      "enabled": true,
+      "parameters": [
+        {"title": "Query", "name": "query", "type": "text", "required": false, "editable": true, "visible": true, "description": "Search query (e.g. company name, domain)."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "analyze_malware_file",
+      "title": "Analyze Malware File",
+      "description": "Submits a file for malware analysis. Requires Threat Analysis API Key.",
+      "category": "investigation",
+      "annotation": "analyze_malware_file",
+      "enabled": true,
+      "parameters": [
+        {"title": "File Content", "name": "file_content", "type": "text", "required": true, "editable": true, "visible": true, "description": "Base64-encoded file content to analyze."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_combo_lists",
+      "title": "Get Combo Lists",
+      "description": "Retrieves available credential combolist records.",
+      "category": "investigation",
+      "annotation": "get_combo_lists",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_combolist_details",
+      "title": "Get Combolist Details",
+      "description": "Retrieves details for a specific combolist.",
+      "category": "investigation",
+      "annotation": "get_combolist_details",
+      "enabled": true,
+      "parameters": [
+        {"title": "Combolist UUID", "name": "combolist_uuid", "type": "text", "required": true, "editable": true, "visible": true, "description": "UUID of the combolist."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "search_fraud_card",
+      "title": "Search Fraud Card",
+      "description": "Searches for compromised card data.",
+      "category": "investigation",
+      "annotation": "search_fraud_card",
+      "enabled": true,
+      "parameters": [
+        {"title": "Card Number", "name": "card_number", "type": "password", "required": true, "editable": true, "visible": true, "description": "Card number to search for."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "lookup_bin",
+      "title": "BIN Lookup",
+      "description": "Retrieves information about a Bank Identification Number (BIN).",
+      "category": "investigation",
+      "annotation": "lookup_bin",
+      "enabled": true,
+      "parameters": [
+        {"title": "BIN", "name": "bin", "type": "text", "required": true, "editable": true, "visible": true, "description": "Bank Identification Number (first 6-8 digits of card)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "list_premium_feeds",
+      "title": "List Premium Feeds",
+      "description": "Retrieves available premium threat feed subscriptions.",
+      "category": "investigation",
+      "annotation": "list_premium_feeds",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_premium_feed_content",
+      "title": "Get Premium Feed Content",
+      "description": "Retrieves content from a specific premium threat feed.",
+      "category": "investigation",
+      "annotation": "get_premium_feed_content",
+      "enabled": true,
+      "parameters": [
+        {"title": "Feed UUID", "name": "feed_uuid", "type": "text", "required": true, "editable": true, "visible": true, "description": "UUID of the premium feed."},
+        {"title": "Feed Format", "name": "feed_format", "type": "select", "required": true, "editable": true, "visible": true, "options": ["json","csv","stix","txt"], "description": "Format of the feed content."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_company_events",
+      "title": "Get Company Events",
+      "description": "Retrieves company security events.",
+      "category": "investigation",
+      "annotation": "get_company_events",
+      "enabled": true,
+      "parameters": [
+        {"title": "Start Date", "name": "start_date", "type": "datetime", "required": false, "editable": true, "visible": true, "description": "Filter events from this date."},
+        {"title": "End Date", "name": "end_date", "type": "datetime", "required": false, "editable": true, "visible": true, "description": "Filter events until this date."},
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_company_audit_logs",
+      "title": "Get Company Audit Logs",
+      "description": "Retrieves user audit logs for the company.",
+      "category": "investigation",
+      "annotation": "get_company_audit_logs",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_ioc_feed",
+      "title": "Get Collection Based IOC Feed",
+      "description": "Retrieves IoC feed data from a specific collection.",
+      "category": "investigation",
+      "annotation": "get_ioc_feed",
+      "enabled": true,
+      "parameters": [
+        {"title": "Collection UUID", "name": "collection_uuid", "type": "text", "required": true, "editable": true, "visible": true, "description": "UUID of the IoC collection."},
+        {"title": "Feed Format", "name": "feed_format", "type": "select", "required": true, "editable": true, "visible": true, "options": ["json","csv","stix","txt"], "description": "Format of the feed."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_supply_chain_report",
+      "title": "Get Supply Chain Report",
+      "description": "Retrieves third-party supply chain risk reports.",
+      "category": "investigation",
+      "annotation": "get_supply_chain_report",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_drp_configuration_assets",
+      "title": "Get DRP Configuration Assets",
+      "description": "Retrieves assets configured for Digital Risk Protection monitoring.",
+      "category": "investigation",
+      "annotation": "get_drp_configuration_assets",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "add_drp_asset",
+      "title": "Add DRP Asset",
+      "description": "Adds an asset to Digital Risk Protection monitoring.",
+      "category": "investigation",
+      "annotation": "add_drp_asset",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset", "name": "asset", "type": "text", "required": true, "editable": true, "visible": true, "description": "Asset value to add (domain, keyword, etc.)."},
+        {"title": "Asset Type", "name": "asset_type", "type": "text", "required": true, "editable": true, "visible": true, "description": "Type of asset (domain, keyword, etc.)."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_drp_monitoring_status",
+      "title": "Update DRP Monitoring Status",
+      "description": "Enables or disables monitoring for a DRP configured asset.",
+      "category": "investigation",
+      "annotation": "update_drp_monitoring_status",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset ID", "name": "asset_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the DRP asset."},
+        {"title": "Status", "name": "status", "type": "text", "required": true, "editable": true, "visible": true, "description": "New monitoring status."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "post_referrer_logs",
+      "title": "Submit Referrer Logs",
+      "description": "Submits referrer log data for analysis.",
+      "category": "investigation",
+      "annotation": "post_referrer_logs",
+      "enabled": true,
+      "parameters": [
+        {"title": "Referrer Data", "name": "referrer_data", "type": "text", "required": true, "editable": true, "visible": true, "description": "Referrer log data to submit."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_feed_sources",
+      "title": "Get Threat Feed Sources",
+      "description": "Retrieves available CTI threat feed sources.",
+      "category": "investigation",
+      "annotation": "get_feed_sources",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_feed_source_details",
+      "title": "Get Threat Feed Source Details",
+      "description": "Retrieves detailed information about a specific threat feed source.",
+      "category": "investigation",
+      "annotation": "get_feed_source_details",
+      "enabled": true,
+      "parameters": [
+        {"title": "Feed ID", "name": "feed_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the feed source."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "create_tenant",
+      "title": "Create Tenant",
+      "description": "Creates a new tenant company in the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "create_tenant",
+      "enabled": true,
+      "parameters": [
+        {"title": "Name", "name": "name", "type": "text", "required": true, "editable": true, "visible": true, "description": "Name of the new tenant company."},
+        {"title": "Domain", "name": "domain", "type": "text", "required": false, "editable": true, "visible": true, "description": "Primary domain of the tenant."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "extend_tenant_subscription",
+      "title": "Extend Tenant Subscription",
+      "description": "Extends the subscription of a tenant company.",
+      "category": "investigation",
+      "annotation": "extend_tenant_subscription",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant."},
+        {"title": "End Date", "name": "end_date", "type": "datetime", "required": true, "editable": true, "visible": true, "description": "New subscription end date."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "archive_tenant",
+      "title": "Archive Tenant",
+      "description": "Archives a tenant company.",
+      "category": "investigation",
+      "annotation": "archive_tenant",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant to archive."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "unarchive_tenant",
+      "title": "Unarchive Tenant",
+      "description": "Unarchives a previously archived tenant company.",
+      "category": "investigation",
+      "annotation": "unarchive_tenant",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant to unarchive."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_tenant_settings",
+      "title": "Update Tenant Settings",
+      "description": "Updates settings for a tenant company.",
+      "category": "investigation",
+      "annotation": "update_tenant_settings",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant."},
+        {"title": "Settings", "name": "settings", "type": "text", "required": true, "editable": true, "visible": true, "description": "JSON object of settings to update."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_tenant_service_config",
+      "title": "Update Tenant Service Configuration",
+      "description": "Updates service configuration for a tenant company.",
+      "category": "investigation",
+      "annotation": "update_tenant_service_config",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant."},
+        {"title": "Config", "name": "config", "type": "text", "required": true, "editable": true, "visible": true, "description": "JSON object of service configuration."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_tenant_detail",
+      "title": "Get Tenant Detail",
+      "description": "Retrieves details for a specific tenant company.",
+      "category": "investigation",
+      "annotation": "get_tenant_detail",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_tenant_history",
+      "title": "Get Tenant History",
+      "description": "Retrieves change history for a specific tenant company.",
+      "category": "investigation",
+      "annotation": "get_tenant_history",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "list_tenants",
+      "title": "List Tenants",
+      "description": "Retrieves all tenant companies in the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "list_tenants",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "change_tenant_ecosystem",
+      "title": "Change Tenant Ecosystem",
+      "description": "Moves a tenant company to a different ecosystem.",
+      "category": "investigation",
+      "annotation": "change_tenant_ecosystem",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant."},
+        {"title": "Ecosystem ID", "name": "ecosystem_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the target ecosystem."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_multi_tenant_param_options",
+      "title": "Get Multi-Tenant Parameter Options",
+      "description": "Retrieves available parameter options for multi-tenant operations.",
+      "category": "investigation",
+      "annotation": "get_multi_tenant_param_options",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "list_ecosystems",
+      "title": "List Ecosystems",
+      "description": "Retrieves all ecosystems in the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "list_ecosystems",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "create_ecosystem",
+      "title": "Create Ecosystem",
+      "description": "Creates a new ecosystem in the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "create_ecosystem",
+      "enabled": true,
+      "parameters": [
+        {"title": "Name", "name": "name", "type": "text", "required": true, "editable": true, "visible": true, "description": "Name of the new ecosystem."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "delete_ecosystem",
+      "title": "Delete Ecosystem",
+      "description": "Deletes an ecosystem from the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "delete_ecosystem",
+      "enabled": true,
+      "parameters": [
+        {"title": "Ecosystem ID", "name": "ecosystem_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the ecosystem to delete."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_ecosystem_name",
+      "title": "Update Ecosystem Name",
+      "description": "Updates the name of an ecosystem.",
+      "category": "investigation",
+      "annotation": "update_ecosystem_name",
+      "enabled": true,
+      "parameters": [
+        {"title": "Ecosystem ID", "name": "ecosystem_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the ecosystem."},
+        {"title": "Name", "name": "name", "type": "text", "required": true, "editable": true, "visible": true, "description": "New name for the ecosystem."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_multi_tenant_incidents",
+      "title": "Get Multi-Tenant Incidents",
+      "description": "Retrieves incidents across all tenant companies.",
+      "category": "investigation",
+      "annotation": "get_multi_tenant_incidents",
+      "enabled": true,
+      "parameters": [
+        {"title": "Limit", "name": "limit", "type": "integer", "required": false, "editable": true, "visible": true, "value": 50, "description": "Maximum records."},
+        {"title": "Page", "name": "page", "type": "integer", "required": false, "editable": true, "visible": true, "value": 1, "description": "Page number."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_tenant_settings_details",
+      "title": "Get Tenant Settings Details",
+      "description": "Retrieves detailed settings for the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "get_tenant_settings_details",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "download_asset_sizing",
+      "title": "Download Asset Sizing",
+      "description": "Downloads the asset sizing report for tenant provisioning.",
+      "category": "investigation",
+      "annotation": "download_asset_sizing",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "calculate_asset_sizing",
+      "title": "Calculate Asset Sizing",
+      "description": "Calculates asset sizing requirements for tenant provisioning.",
+      "category": "investigation",
+      "annotation": "calculate_asset_sizing",
+      "enabled": true,
+      "parameters": [
+        {"title": "Asset Count", "name": "asset_count", "type": "integer", "required": true, "editable": true, "visible": true, "description": "Number of assets to calculate sizing for."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "create_tenant_template",
+      "title": "Create Tenant Template",
+      "description": "Creates a configuration template for tenant provisioning.",
+      "category": "investigation",
+      "annotation": "create_tenant_template",
+      "enabled": true,
+      "parameters": [
+        {"title": "Template", "name": "template", "type": "text", "required": true, "editable": true, "visible": true, "description": "JSON object representing the template configuration."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "list_tenant_templates",
+      "title": "List Tenant Templates",
+      "description": "Retrieves available tenant configuration templates.",
+      "category": "investigation",
+      "annotation": "list_tenant_templates",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "list_multi_tenant_users",
+      "title": "List Multi-Tenant Users",
+      "description": "Retrieves all users in the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "list_multi_tenant_users",
+      "enabled": true,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "list_tenant_company_users",
+      "title": "List Tenant Company Users",
+      "description": "Retrieves users assigned to a specific tenant company.",
+      "category": "investigation",
+      "annotation": "list_tenant_company_users",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "create_multi_tenant_user",
+      "title": "Create Multi-Tenant User",
+      "description": "Creates a new user in the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "create_multi_tenant_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "Email", "name": "email", "type": "text", "required": true, "editable": true, "visible": true, "description": "Email address of the new user."},
+        {"title": "Name", "name": "name", "type": "text", "required": true, "editable": true, "visible": true, "description": "Full name of the new user."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "update_multi_tenant_user",
+      "title": "Update Multi-Tenant User",
+      "description": "Updates a user in the multi-tenant environment.",
+      "category": "investigation",
+      "annotation": "update_multi_tenant_user",
+      "enabled": true,
+      "parameters": [
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user to update."},
+        {"title": "Name", "name": "name", "type": "text", "required": false, "editable": true, "visible": true, "description": "Updated name."},
+        {"title": "Email", "name": "email", "type": "text", "required": false, "editable": true, "visible": true, "description": "Updated email."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "assign_user_to_tenant",
+      "title": "Assign User To Tenant",
+      "description": "Assigns a user to a tenant company.",
+      "category": "investigation",
+      "annotation": "assign_user_to_tenant",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant company."},
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user to assign."}
+      ],
+      "output_schema": {}
+    },
+    {
+      "operation": "unassign_user_from_tenant",
+      "title": "Unassign User From Tenant",
+      "description": "Removes a user from a tenant company.",
+      "category": "investigation",
+      "annotation": "unassign_user_from_tenant",
+      "enabled": true,
+      "parameters": [
+        {"title": "Tenant ID", "name": "tenant_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the tenant company."},
+        {"title": "User ID", "name": "user_id", "type": "text", "required": true, "editable": true, "visible": true, "description": "ID of the user to unassign."}
+      ],
+      "output_schema": {}
     }
   ]
 }
-
